@@ -12,10 +12,10 @@
 #include "fsl_dma.h"
 #include "fsl_common.h"
 #include "fsl_lpadc.h"
-#include "fsl_ctimer.h"
-#include "fsl_clock.h"
 #include "fsl_gpio.h"
 #include "fsl_rtc.h"
+#include "fsl_ctimer.h"
+#include "fsl_clock.h"
 #include "usb_device_composite.h"
 
 #if defined(__cplusplus)
@@ -41,17 +41,19 @@ extern "C" {
 /* Alias for ADC0 peripheral */
 #define ADC0_PERIPHERAL ADC0
 /* Definition of peripheral ID */
+#define GPIO_GPIO GPIO
+/* Definition of peripheral ID */
+#define RTC_PERIPHERAL RTC
+/* Definition of peripheral ID */
 #define CTIMER0_PERIPHERAL CTIMER0
 /* Timer tick frequency in Hz (input frequency of the timer) */
 #define CTIMER0_TICK_FREQ 150000000UL
 /* Timer tick period in ns (input period of the timer) */
 #define CTIMER0_TICK_PERIOD 7UL
+/* Definition of PWM period channel. */
+#define CTIMER0_PWM_PERIOD_CH kCTIMER_Match_0
 /* Definition of channel 3 ID */
 #define CTIMER0_MATCH_0_CHANNEL kCTIMER_Match_3
-/* Definition of peripheral ID */
-#define GPIO_GPIO GPIO
-/* Definition of peripheral ID */
-#define RTC_PERIPHERAL RTC
 
 /***********************************************************************************************************************
  * Global variables
@@ -62,10 +64,10 @@ extern dma_descriptor_t DMA0_CH0_TCDs_config[2];
 extern const lpadc_config_t ADC0_config;
 extern lpadc_conv_command_config_t ADC0_commandsConfig[4];
 extern lpadc_conv_trigger_config_t ADC0_triggersConfig[1];
-extern const ctimer_config_t CTIMER0_config;
-extern const ctimer_match_config_t CTIMER0_Match_0_config;
 /* Date and time structure */
 extern rtc_datetime_t RTC_dateTimeStruct;
+extern const ctimer_config_t CTIMER0_config;
+extern const ctimer_match_config_t CTIMER0_Match_0_config;
 
 /***********************************************************************************************************************
  * Callback functions

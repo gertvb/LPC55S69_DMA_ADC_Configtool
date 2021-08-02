@@ -11,17 +11,35 @@
 * Include
 *************************************************************************************
 ********************************************************************************** */
-#include "generic_list.h"
+#include "fsl_component_generic_list.h"
+
+#if defined(OSA_USED)
+#include "fsl_os_abstraction.h"
+#if (defined(USE_RTOS) && (USE_RTOS > 0U))
+#define LIST_ENTER_CRITICAL() \
+    OSA_SR_ALLOC();           \
+    OSA_ENTER_CRITICAL()
+#define LIST_EXIT_CRITICAL() OSA_EXIT_CRITICAL()
+#else
+#define LIST_ENTER_CRITICAL()
+#define LIST_EXIT_CRITICAL()
+#endif
+#else
+#define LIST_ENTER_CRITICAL() uint32_t regPrimask = DisableGlobalIRQ();
+#define LIST_EXIT_CRITICAL()  EnableGlobalIRQ(regPrimask);
+#endif
 
 static list_status_t LIST_Error_Check(list_handle_t list, list_element_handle_t newElement)
 {
-    list_status_t listStatus      = kLIST_Ok;
+    list_status_t listStatus = kLIST_Ok;
+#if (defined(GENERIC_LIST_DUPLICATED_CHECKING) && (GENERIC_LIST_DUPLICATED_CHECKING > 0U))
     list_element_handle_t element = list->head;
-
+#endif
     if ((list->max != 0U) && (list->max == list->size))
     {
         listStatus = kLIST_Full; /*List is full*/
     }
+#if (defined(GENERIC_LIST_DUPLICATED_CHECKING) && (GENERIC_LIST_DUPLICATED_CHECKING > 0U))
     else
     {
         while (element != NULL) /*Scan list*/
@@ -35,7 +53,7 @@ static list_status_t LIST_Error_Check(list_handle_t list, list_element_handle_t 
             element = element->next;
         }
     }
-
+#endif
     return listStatus;
 }
 
@@ -105,7 +123,7 @@ list_handle_t LIST_GetList(list_element_handle_t element)
  ********************************************************************************** */
 list_status_t LIST_AddTail(list_handle_t list, list_element_handle_t element)
 {
-    uint32_t regPrimask      = DisableGlobalIRQ();
+    LIST_ENTER_CRITICAL();
     list_status_t listStatus = kLIST_Ok;
 
     listStatus = LIST_Error_Check(list, element);
@@ -129,7 +147,7 @@ list_status_t LIST_AddTail(list_handle_t list, list_element_handle_t element)
         list->size++;
     }
 
-    EnableGlobalIRQ(regPrimask);
+    LIST_EXIT_CRITICAL();
     return listStatus;
 }
 
@@ -151,7 +169,7 @@ list_status_t LIST_AddTail(list_handle_t list, list_element_handle_t element)
  ********************************************************************************** */
 list_status_t LIST_AddHead(list_handle_t list, list_element_handle_t element)
 {
-    uint32_t regPrimask      = DisableGlobalIRQ();
+    LIST_ENTER_CRITICAL();
     list_status_t listStatus = kLIST_Ok;
 
     listStatus = LIST_Error_Check(list, element);
@@ -176,7 +194,7 @@ list_status_t LIST_AddHead(list_handle_t list, list_element_handle_t element)
         list->size++;
     }
 
-    EnableGlobalIRQ(regPrimask);
+    LIST_EXIT_CRITICAL();
     return listStatus;
 }
 
@@ -199,7 +217,7 @@ list_element_handle_t LIST_RemoveHead(list_handle_t list)
 {
     list_element_handle_t element;
 
-    uint32_t regPrimask = DisableGlobalIRQ();
+    LIST_ENTER_CRITICAL();
 
     if ((NULL == list) || (list->size == 0U))
     {
@@ -224,7 +242,7 @@ list_element_handle_t LIST_RemoveHead(list_handle_t list)
         list->head    = element->next; /*Is NULL if element is head*/
     }
 
-    EnableGlobalIRQ(regPrimask);
+    LIST_EXIT_CRITICAL();
     return element;
 }
 
@@ -310,7 +328,7 @@ list_element_handle_t LIST_GetPrev(list_element_handle_t element)
 list_status_t LIST_RemoveElement(list_element_handle_t element)
 {
     list_status_t listStatus = kLIST_Ok;
-    uint32_t regPrimask      = DisableGlobalIRQ();
+    LIST_ENTER_CRITICAL();
 
     if (element->list == NULL)
     {
@@ -320,7 +338,7 @@ list_status_t LIST_RemoveElement(list_element_handle_t element)
     {
 #if (defined(GENERIC_LIST_LIGHT) && (GENERIC_LIST_LIGHT > 0U))
         list_element_handle_t element_list = element->list->head;
-        while (element_list)
+        while (NULL != element_list)
         {
             if (element->list->head == element)
             {
@@ -356,7 +374,7 @@ list_status_t LIST_RemoveElement(list_element_handle_t element)
         element->list = NULL;
     }
 
-    EnableGlobalIRQ(regPrimask);
+    LIST_EXIT_CRITICAL();
     return listStatus;
 }
 
@@ -381,7 +399,7 @@ list_status_t LIST_RemoveElement(list_element_handle_t element)
 list_status_t LIST_AddPrevElement(list_element_handle_t element, list_element_handle_t newElement)
 {
     list_status_t listStatus = kLIST_Ok;
-    uint32_t regPrimask      = DisableGlobalIRQ();
+    LIST_ENTER_CRITICAL();
 
     if (element->list == NULL)
     {
@@ -394,7 +412,7 @@ list_status_t LIST_AddPrevElement(list_element_handle_t element, list_element_ha
         {
 #if (defined(GENERIC_LIST_LIGHT) && (GENERIC_LIST_LIGHT > 0U))
             list_element_handle_t element_list = element->list->head;
-            while (element_list)
+            while (NULL != element_list)
             {
                 if ((element_list->next == element) || (element_list == element))
                 {
@@ -432,7 +450,7 @@ list_status_t LIST_AddPrevElement(list_element_handle_t element, list_element_ha
         }
     }
 
-    EnableGlobalIRQ(regPrimask);
+    LIST_EXIT_CRITICAL();
     return listStatus;
 }
 

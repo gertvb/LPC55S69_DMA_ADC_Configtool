@@ -56,7 +56,7 @@ void BOARD_InitBootClocks(void)
 name: BOARD_BootClockRUN
 called_from_default_init: true
 outputs:
-- {id: ASYNCADC_clock.outFreq, value: 6 MHz}
+- {id: ASYNCADC_clock.outFreq, value: 24 MHz}
 - {id: CTIMER0_clock.outFreq, value: 150 MHz}
 - {id: FXCOM0_clock.outFreq, value: 12 MHz}
 - {id: SYSTICK0_clock.outFreq, value: 1 MHz}
@@ -66,10 +66,10 @@ outputs:
 - {id: USB0_clock.outFreq, value: 48 MHz}
 - {id: WDT_clock.outFreq, value: 1 MHz}
 settings:
-- {id: PLL0_Mode, value: Normal}
 - {id: PLL1_Mode, value: Normal}
 - {id: ANALOG_CONTROL_FRO192M_CTRL_ENDI_FRO_96M_CFG, value: Enable}
-- {id: SYSCON.ADCCLKSEL.sel, value: SYSCON.PLL0_BYPASS}
+- {id: SYSCON.ADCCLKDIV.scale, value: '4', locked: true}
+- {id: SYSCON.ADCCLKSEL.sel, value: ANACTRL.fro_hf_clk}
 - {id: SYSCON.CTIMERCLKSEL0.sel, value: SYSCON.MAINCLKSELB}
 - {id: SYSCON.FCCLKSEL0.sel, value: ANACTRL.fro_12m_clk}
 - {id: SYSCON.MAINCLKSELB.sel, value: SYSCON.PLL1_BYPASS}
@@ -117,19 +117,7 @@ void BOARD_BootClockRUN(void)
     POWER_SetVoltageForFreq(150000000U);                  /*!< Set voltage for the one of the fastest clock outputs: System clock output */
     CLOCK_SetFLASHAccessCyclesForFreq(150000000U);          /*!< Set FLASH wait states for core */
 
-    /*!< Set up PLL */
-    CLOCK_AttachClk(kFRO12M_to_PLL0);                    /*!< Switch PLL0CLKSEL to FRO12M */
-    POWER_DisablePD(kPDRUNCFG_PD_PLL0);                  /* Ensure PLL is on  */
-    POWER_DisablePD(kPDRUNCFG_PD_PLL0_SSCG);
-    const pll_setup_t pll0Setup = {
-        .pllctrl = SYSCON_PLL0CTRL_CLKEN_MASK | SYSCON_PLL0CTRL_SELI(40U) | SYSCON_PLL0CTRL_SELP(31U),
-        .pllndec = SYSCON_PLL0NDEC_NDIV(8U),
-        .pllpdec = SYSCON_PLL0PDEC_PDIV(25U),
-        .pllsscg = {0x0U,(SYSCON_PLL0SSCG1_MDIV_EXT(200U) | SYSCON_PLL0SSCG1_SEL_EXT_MASK)},
-        .pllRate = 6000000U,
-        .flags =  PLL_SETUPFLAG_WAITLOCK
-    };
-    CLOCK_SetPLL0Freq(&pll0Setup);                       /*!< Configure PLL0 to the desired values */
+    /*!< PLL0 is in power_down mode */
 
     /*!< Set up PLL1 */
     CLOCK_AttachClk(kFRO12M_to_PLL1);                    /*!< Switch PLL1CLKSEL to FRO12M */
@@ -154,13 +142,13 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetClkDiv(kCLOCK_DivWdtClk, 0U, true);               /*!< Reset WDTCLKDIV divider counter and halt it */
     CLOCK_SetClkDiv(kCLOCK_DivWdtClk, 1U, false);         /*!< Set WDTCLKDIV divider to value 1 */
     CLOCK_SetClkDiv(kCLOCK_DivAdcAsyncClk, 0U, true);               /*!< Reset ADCCLKDIV divider counter and halt it */
-    CLOCK_SetClkDiv(kCLOCK_DivAdcAsyncClk, 1U, false);         /*!< Set ADCCLKDIV divider to value 1 */
+    CLOCK_SetClkDiv(kCLOCK_DivAdcAsyncClk, 4U, false);         /*!< Set ADCCLKDIV divider to value 4 */
     CLOCK_SetClkDiv(kCLOCK_DivUsb0Clk, 0U, true);               /*!< Reset USB0CLKDIV divider counter and halt it */
     CLOCK_SetClkDiv(kCLOCK_DivUsb0Clk, 2U, false);         /*!< Set USB0CLKDIV divider to value 2 */
 
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kPLL1_to_MAIN_CLK);                 /*!< Switch MAIN_CLK to PLL1 */
-    CLOCK_AttachClk(kPLL0_to_ADC_CLK);                 /*!< Switch ADC_CLK to PLL0 */
+    CLOCK_AttachClk(kFRO_HF_to_ADC_CLK);                 /*!< Switch ADC_CLK to FRO_HF */
     CLOCK_AttachClk(kFRO_HF_to_USB0_CLK);                 /*!< Switch USB0_CLK to FRO_HF */
     CLOCK_AttachClk(kFRO12M_to_FLEXCOMM0);                 /*!< Switch FLEXCOMM0 to FRO12M */
     CLOCK_AttachClk(kFRO1M_to_TRACE);                 /*!< Switch TRACE to FRO1M */

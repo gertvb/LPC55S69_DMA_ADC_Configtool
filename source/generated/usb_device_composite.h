@@ -71,6 +71,20 @@ typedef enum _usb_power_status
     kStatus_Resumed,
 } usb_power_status_t;
 
+#if (defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && (USB_DEVICE_CONFIG_CHARGER_DETECT > 0U))
+/*! @brief USB DCD charging detect status */
+typedef enum _usb_device_dcd_dev_status
+{
+    kUSB_DeviceDCDDectionInit = 0x0U,
+    kUSB_DeviceDCDDectionError,
+    kUSB_DeviceDCDDectionTimeOut,
+    kUSB_DeviceDCDDectionSDP,
+    kUSB_DeviceDCDDectionCDP,
+    kUSB_DeviceDCDDectionDCP,
+    kUSB_DeviceDCDDectionFinished,
+} usb_device_dcd_dev_status_t;
+#endif
+
 /*!
  * @brief Structure containing device handle, hadle of interfaces and information on curren configuration, alternate setting, speed and attachment status.
  *
@@ -84,18 +98,19 @@ typedef struct _usb_device_composite_struct
     uint8_t currentInterfaceAlternateSetting[USB_COMPOSITE_INTERFACE_COUNT]; /*alternate setting number*/
     uint8_t speed;    /*USB speed code, one of the following: USB_SPEED_FULL(0x00U),USB_SPEED_LOW(0x01U),USB_SPEED_HIGH(0x02U)*/
     volatile uint8_t attach;    /*status of device attachment*/
-#if (defined(USB_DEVICE_CHARGER_DETECT_ENABLE) && (USB_DEVICE_CHARGER_DETECT_ENABLE > 0U))
-    volatile uint8_t vReginInterruptDetected;
-    volatile uint8_t vbusValid;
-    volatile usb_device_dcd_port_type_t dcdPortType;
-    volatile usb_device_dcd_dev_status_t dcdDevStatus;
-#endif
     volatile uint64_t hwTick;
-    uint64_t startTick;
+    uint64_t startTick; 
     volatile uint8_t remoteWakeup;
     volatile uint8_t selfWakeup;
     volatile uint8_t isResume;
     volatile usb_power_status_t suspend;
+#if (defined(USB_DEVICE_CONFIG_DETACH_ENABLE) && (USB_DEVICE_CONFIG_DETACH_ENABLE > 0U))
+    volatile uint8_t connectStateChanged;
+    volatile uint8_t connectState;
+#endif
+#if (defined(USB_DEVICE_CONFIG_CHARGER_DETECT) && (USB_DEVICE_CONFIG_CHARGER_DETECT > 0U))
+    usb_device_dcd_dev_status_t dcdDectionStatus;
+#endif
 } usb_device_composite_struct_t;
 
 /*!

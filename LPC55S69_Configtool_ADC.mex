@@ -71,9 +71,9 @@
                   <pin peripheral="ADC0" signal="CH, 0" pin_num="20" pin_signal="PIO0_23/MCLK/CTIMER1_MAT2/CTIMER3_MAT3/SCT0_OUT4/FC0_CTS_SDA_SSEL0/SD1_D1/SECURE_GPIO0_23/ADC0_0"/>
                   <pin peripheral="ADC0" signal="CH, 8" pin_num="14" pin_signal="PIO0_16/FC4_TXD_SCL_MISO_WS/CLKOUT/CT_INP4/SECURE_GPIO0_16/ADC0_8"/>
                   <pin peripheral="ADC0" signal="CH, 2" pin_num="22" pin_signal="PIO0_15/FC6_CTS_SDA_SSEL0/UTICK_CAP2/CT_INP16/SCT0_OUT2/SD0_WR_PRT/SECURE_GPIO0_15/ADC0_2"/>
-                  <pin peripheral="ADC0" signal="CH, 3" pin_num="23" pin_signal="PIO0_31/FC0_CTS_SDA_SSEL0/SD0_D2/CTIMER0_MAT1/SCT0_OUT3/SECURE_GPIO0_31/ADC0_3"/>
-                  <pin peripheral="ADC0" signal="CH, 11" pin_num="11" pin_signal="PIO1_0/FC0_RTS_SCL_SSEL1/SD0_D3/CT_INP2/SCT_GPI4/PLU_OUT3/ADC0_11"/>
                   <pin peripheral="ADC0" signal="CH, 4" pin_num="24" pin_signal="PIO1_8/FC0_CTS_SDA_SSEL0/SD0_CLK/SCT0_OUT1/FC4_SSEL2/ADC0_4"/>
+                  <pin peripheral="ADC0" signal="CH, 11" pin_num="11" pin_signal="PIO1_0/FC0_RTS_SCL_SSEL1/SD0_D3/CT_INP2/SCT_GPI4/PLU_OUT3/ADC0_11"/>
+                  <pin peripheral="ADC0" signal="CH, 3" pin_num="23" pin_signal="PIO0_31/FC0_CTS_SDA_SSEL0/SD0_D2/CTIMER0_MAT1/SCT0_OUT3/SECURE_GPIO0_31/ADC0_3"/>
                   <pin peripheral="GPIO" signal="PIO0, 4" pin_num="86" pin_signal="PIO0_4/FC4_SCK/CT_INP12/SCT_GPI4/FC3_CTS_SDA_SSEL0/SECURE_GPIO0_4">
                      <pin_features>
                         <pin_feature name="direction" value="OUTPUT"/>
@@ -164,7 +164,7 @@
                   <clock_source id="SYSCON.fro_1m.outFreq" value="1 MHz" locked="false" enabled="false"/>
                </clock_sources>
                <clock_outputs>
-                  <clock_output id="ASYNCADC_clock.outFreq" value="6 MHz" locked="false" accuracy=""/>
+                  <clock_output id="ASYNCADC_clock.outFreq" value="24 MHz" locked="false" accuracy=""/>
                   <clock_output id="CTIMER0_clock.outFreq" value="150 MHz" locked="false" accuracy=""/>
                   <clock_output id="FXCOM0_clock.outFreq" value="12 MHz" locked="false" accuracy=""/>
                   <clock_output id="SYSTICK0_clock.outFreq" value="1 MHz" locked="false" accuracy=""/>
@@ -175,10 +175,10 @@
                   <clock_output id="WDT_clock.outFreq" value="1 MHz" locked="false" accuracy=""/>
                </clock_outputs>
                <clock_settings>
-                  <setting id="PLL0_Mode" value="Normal" locked="false"/>
                   <setting id="PLL1_Mode" value="Normal" locked="false"/>
                   <setting id="ANALOG_CONTROL_FRO192M_CTRL_ENDI_FRO_96M_CFG" value="Enable" locked="false"/>
-                  <setting id="SYSCON.ADCCLKSEL.sel" value="SYSCON.PLL0_BYPASS" locked="false"/>
+                  <setting id="SYSCON.ADCCLKDIV.scale" value="4" locked="true"/>
+                  <setting id="SYSCON.ADCCLKSEL.sel" value="ANACTRL.fro_hf_clk" locked="false"/>
                   <setting id="SYSCON.CTIMERCLKSEL0.sel" value="SYSCON.MAINCLKSELB" locked="false"/>
                   <setting id="SYSCON.FCCLKSEL0.sel" value="ANACTRL.fro_12m_clk" locked="false"/>
                   <setting id="SYSCON.MAINCLKSELB.sel" value="SYSCON.PLL1_BYPASS" locked="false"/>
@@ -221,16 +221,6 @@
                   <data type="Version">2.2.0</data>
                </feature>
             </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.ctimer" description="CTimer Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
-               <feature name="enabled" evaluation="equal">
-                  <data type="Boolean">true</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.ctimer" description="Unsupported version of the CTimer Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
-               <feature name="version" evaluation="equivalent">
-                  <data type="Version">2.0.2</data>
-               </feature>
-            </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.lpc_dma" description="DMA Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
@@ -261,6 +251,16 @@
                   <data type="Version">2.1.0</data>
                </feature>
             </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.ctimer" description="CTimer Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.ctimer" description="Unsupported version of the CTimer Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.2.0</data>
+               </feature>
+            </dependency>
             <dependency resourceType="SWComponent" resourceId="middleware.usb.common_header" description="USB Common Header not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
@@ -268,7 +268,7 @@
             </dependency>
             <dependency resourceType="SWComponent" resourceId="middleware.usb.common_header" description="Unsupported version of the USB Common Header in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
                <feature name="version" evaluation="equivalent">
-                  <data type="Version">2.6.0</data>
+                  <data type="Version">2.7.0</data>
                </feature>
             </dependency>
          </dependencies>
@@ -328,6 +328,11 @@
                         <data type="Boolean">true</data>
                      </feature>
                   </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="DMA0.dma_trig.21" description="Trigger 21 not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="ClockOutput" resourceId="CTIMER0_clock" description="CTIMER0_clock is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="frequency" evaluation="greaterThan">
                         <data type="Frequency" unit="Hz">0</data>
@@ -335,11 +340,6 @@
                   </dependency>
                   <dependency resourceType="PeripheralUnifiedSignal" resourceId="CTIMER0.ctimer_match.3" description="Match output of the match 3 channel of peripheral CTIMER0 is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="routed" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="DMA0.dma_trig.21" description="Trigger 21 not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="routed" evaluation="">
                         <data type="Boolean">true</data>
                      </feature>
                   </dependency>
@@ -396,7 +396,7 @@
                            <setting name="triggerPriorityPolicy" value="kLPADC_TriggerPriorityPreemptSubsequently"/>
                            <setting name="enableConvPause" value="false"/>
                            <setting name="convPauseDelay" value="0"/>
-                           <setting name="FIFO0Watermark" value="5"/>
+                           <setting name="FIFO0Watermark" value="6"/>
                            <setting name="FIFO1Watermark" value="0"/>
                            <setting name="FIFO0WatermarkDMA" value="true"/>
                            <setting name="FIFO1WatermarkDMA" value="false"/>
@@ -409,8 +409,8 @@
                               <setting name="channelNumber" value="CH.0"/>
                               <setting name="enableAutoChannelIncrement" value="false"/>
                               <setting name="loopCount" value="0"/>
-                              <setting name="hardwareAverageMode" value="kLPADC_HardwareAverageCount1"/>
-                              <setting name="sampleTimeMode" value="kLPADC_SampleTimeADCK131"/>
+                              <setting name="hardwareAverageMode" value="kLPADC_HardwareAverageCount4"/>
+                              <setting name="sampleTimeMode" value="kLPADC_SampleTimeADCK7"/>
                               <setting name="hardwareCompareMode" value="kLPADC_HardwareCompareDisabled"/>
                               <setting name="hardwareCompareValueHigh" value="0"/>
                               <setting name="hardwareCompareValueLow" value="0"/>
@@ -424,8 +424,8 @@
                               <setting name="channelNumber" value="CH.3"/>
                               <setting name="enableAutoChannelIncrement" value="false"/>
                               <setting name="loopCount" value="0"/>
-                              <setting name="hardwareAverageMode" value="kLPADC_HardwareAverageCount1"/>
-                              <setting name="sampleTimeMode" value="kLPADC_SampleTimeADCK131"/>
+                              <setting name="hardwareAverageMode" value="kLPADC_HardwareAverageCount4"/>
+                              <setting name="sampleTimeMode" value="kLPADC_SampleTimeADCK7"/>
                               <setting name="hardwareCompareMode" value="kLPADC_HardwareCompareDisabled"/>
                               <setting name="hardwareCompareValueHigh" value="0"/>
                               <setting name="hardwareCompareValueLow" value="0"/>
@@ -439,8 +439,8 @@
                               <setting name="channelNumber" value="CH.2"/>
                               <setting name="enableAutoChannelIncrement" value="false"/>
                               <setting name="loopCount" value="0"/>
-                              <setting name="hardwareAverageMode" value="kLPADC_HardwareAverageCount1"/>
-                              <setting name="sampleTimeMode" value="kLPADC_SampleTimeADCK131"/>
+                              <setting name="hardwareAverageMode" value="kLPADC_HardwareAverageCount4"/>
+                              <setting name="sampleTimeMode" value="kLPADC_SampleTimeADCK7"/>
                               <setting name="hardwareCompareMode" value="kLPADC_HardwareCompareDisabled"/>
                               <setting name="hardwareCompareValueHigh" value="0"/>
                               <setting name="hardwareCompareValueLow" value="0"/>
@@ -454,8 +454,8 @@
                               <setting name="channelNumber" value="CH.4"/>
                               <setting name="enableAutoChannelIncrement" value="false"/>
                               <setting name="loopCount" value="0"/>
-                              <setting name="hardwareAverageMode" value="kLPADC_HardwareAverageCount1"/>
-                              <setting name="sampleTimeMode" value="kLPADC_SampleTimeADCK131"/>
+                              <setting name="hardwareAverageMode" value="kLPADC_HardwareAverageCount4"/>
+                              <setting name="sampleTimeMode" value="kLPADC_SampleTimeADCK7"/>
                               <setting name="hardwareCompareMode" value="kLPADC_HardwareCompareDisabled"/>
                               <setting name="hardwareCompareValueHigh" value="0"/>
                               <setting name="hardwareCompareValueLow" value="0"/>
@@ -486,37 +486,6 @@
                               <setting name="priority" value="0"/>
                               <setting name="enable_custom_name" value="false"/>
                            </struct>
-                        </struct>
-                     </config_set>
-                  </instance>
-                  <instance name="CTIMER0" uuid="5dc0fc28-602f-405b-b6cb-1e3f82959038" type="ctimer" type_id="ctimer_c8b90232d8b6318ba1dac2cf08fb5f4a" mode="Capture_Match" peripheral="CTIMER0" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
-                     <config_set name="fsl_ctimer">
-                        <struct name="ctimerConfig">
-                           <setting name="mode" value="kCTIMER_TimerMode"/>
-                           <setting name="clockSource" value="FunctionClock"/>
-                           <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
-                           <setting name="timerPrescaler" value="150Mhz"/>
-                        </struct>
-                        <setting name="EnableTimerInInit" value="true"/>
-                        <array name="matchChannels">
-                           <struct name="0">
-                              <setting name="matchChannelPrefixId" value="Match_0"/>
-                              <setting name="matchChannel" value="kCTIMER_Match_3"/>
-                              <setting name="matchValueStr" value="18kHz"/>
-                              <setting name="enableCounterReset" value="true"/>
-                              <setting name="enableCounterStop" value="false"/>
-                              <setting name="outControl" value="kCTIMER_Output_Toggle"/>
-                              <setting name="outPinInitValue" value="low"/>
-                              <setting name="enableInterrupt" value="false"/>
-                           </struct>
-                        </array>
-                        <struct name="interruptCallbackConfig">
-                           <struct name="interrupt">
-                              <setting name="IRQn" value="CTIMER0_IRQn"/>
-                              <setting name="enable_priority" value="false"/>
-                              <setting name="priority" value="0"/>
-                           </struct>
-                           <setting name="callback" value="kCTIMER_NoCallback"/>
                         </struct>
                      </config_set>
                   </instance>
@@ -643,7 +612,46 @@
                         </struct>
                      </config_set>
                   </instance>
-                  <instance name="USB0" uuid="fb186657-2134-4ce0-a399-6db530a8082f" type="usb" type_id="usb_c84d398fe7344af73d7dbb640d3b1867" mode="device" peripheral="USB0" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                  <instance name="NVIC" uuid="797e9988-8886-4ac9-b4d6-70efa6ce1812" type="nvic" type_id="nvic_57b5eef3774cc60acaede6f5b8bddc67" mode="general" peripheral="NVIC" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="nvic">
+                        <array name="interrupt_table">
+                           <struct name="0"/>
+                        </array>
+                        <array name="interrupts"/>
+                     </config_set>
+                  </instance>
+                  <instance name="CTIMER0" uuid="fe83a048-7dba-45f1-93a9-a383faa4dd53" type="ctimer" type_id="ctimer_72ecb1f82fe6700da71dde4e8bc60e39" mode="Capture_Match" peripheral="CTIMER0" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="fsl_ctimer">
+                        <struct name="ctimerConfig">
+                           <setting name="mode" value="kCTIMER_TimerMode"/>
+                           <setting name="clockSource" value="FunctionClock"/>
+                           <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
+                           <setting name="timerPrescaler" value="150MHz"/>
+                        </struct>
+                        <setting name="EnableTimerInInit" value="true"/>
+                        <array name="matchChannels">
+                           <struct name="0">
+                              <setting name="matchChannelPrefixId" value="Match_0"/>
+                              <setting name="matchChannel" value="kCTIMER_Match_3"/>
+                              <setting name="matchValueStr" value="36khz"/>
+                              <setting name="enableCounterReset" value="true"/>
+                              <setting name="enableCounterStop" value="false"/>
+                              <setting name="outControl" value="kCTIMER_Output_Toggle"/>
+                              <setting name="outPinInitValue" value="low"/>
+                              <setting name="enableInterrupt" value="false"/>
+                           </struct>
+                        </array>
+                        <struct name="interruptCallbackConfig">
+                           <struct name="interrupt">
+                              <setting name="IRQn" value="CTIMER0_IRQn"/>
+                              <setting name="enable_priority" value="false"/>
+                              <setting name="priority" value="0"/>
+                           </struct>
+                           <setting name="callback" value="kCTIMER_NoCallback"/>
+                        </struct>
+                     </config_set>
+                  </instance>
+                  <instance name="USB0" uuid="60131651-0a3e-4050-9719-1e339e7a031a" type="usb" type_id="usb_49b3e4c7d25fbcd298641994d1b911e9" mode="device" peripheral="USB0" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
                      <config_set name="deviceSetting">
                         <setting name="vendor_id" value="0x1FC9"/>
                         <setting name="product_id" value="0x0094"/>
@@ -779,14 +787,6 @@
                               </struct>
                            </struct>
                         </array>
-                     </config_set>
-                  </instance>
-                  <instance name="NVIC" uuid="f475639b-c195-4736-b975-8450b8f0c789" type="nvic" type_id="nvic_57b5eef3774cc60acaede6f5b8bddc67" mode="general" peripheral="NVIC" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
-                     <config_set name="nvic">
-                        <array name="interrupt_table">
-                           <struct name="0"/>
-                        </array>
-                        <array name="interrupts"/>
                      </config_set>
                   </instance>
                </instances>

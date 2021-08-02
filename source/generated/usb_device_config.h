@@ -78,7 +78,6 @@
 
 /*! @brief Audio instance count. */
 #define USB_DEVICE_CONFIG_AUDIO (0U)
-
 /*! @brief PHDC instance count. */
 #define USB_DEVICE_CONFIG_PHDC (0U)
 
@@ -173,7 +172,7 @@
 #define USB_DEVICE_CONFIG_ERROR_HANDLING (0U)
 
 /*! @brief Whether the device charger detect feature is enabled or not. */
-#define USB_DEVICE_CHARGER_DETECT_ENABLE (0U)
+#define USB_DEVICE_CONFIG_CHARGER_DETECT (0U)
 
 /*! @brief Wheter dedicated RAM is used. */
 #define USB_STACK_USE_DEDICATED_RAM (1U)

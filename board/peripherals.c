@@ -192,7 +192,7 @@ instance:
       - triggerPriorityPolicy: 'kLPADC_TriggerPriorityPreemptSubsequently'
       - enableConvPause: 'false'
       - convPauseDelay: '0'
-      - FIFO0Watermark: '5'
+      - FIFO0Watermark: '6'
       - FIFO1Watermark: '0'
       - FIFO0WatermarkDMA: 'true'
       - FIFO1WatermarkDMA: 'false'
@@ -204,8 +204,8 @@ instance:
         - channelNumber: 'CH.0'
         - enableAutoChannelIncrement: 'false'
         - loopCount: '0'
-        - hardwareAverageMode: 'kLPADC_HardwareAverageCount1'
-        - sampleTimeMode: 'kLPADC_SampleTimeADCK131'
+        - hardwareAverageMode: 'kLPADC_HardwareAverageCount4'
+        - sampleTimeMode: 'kLPADC_SampleTimeADCK7'
         - hardwareCompareMode: 'kLPADC_HardwareCompareDisabled'
         - hardwareCompareValueHigh: '0'
         - hardwareCompareValueLow: '0'
@@ -218,8 +218,8 @@ instance:
         - channelNumber: 'CH.3'
         - enableAutoChannelIncrement: 'false'
         - loopCount: '0'
-        - hardwareAverageMode: 'kLPADC_HardwareAverageCount1'
-        - sampleTimeMode: 'kLPADC_SampleTimeADCK131'
+        - hardwareAverageMode: 'kLPADC_HardwareAverageCount4'
+        - sampleTimeMode: 'kLPADC_SampleTimeADCK7'
         - hardwareCompareMode: 'kLPADC_HardwareCompareDisabled'
         - hardwareCompareValueHigh: '0'
         - hardwareCompareValueLow: '0'
@@ -232,8 +232,8 @@ instance:
         - channelNumber: 'CH.2'
         - enableAutoChannelIncrement: 'false'
         - loopCount: '0'
-        - hardwareAverageMode: 'kLPADC_HardwareAverageCount1'
-        - sampleTimeMode: 'kLPADC_SampleTimeADCK131'
+        - hardwareAverageMode: 'kLPADC_HardwareAverageCount4'
+        - sampleTimeMode: 'kLPADC_SampleTimeADCK7'
         - hardwareCompareMode: 'kLPADC_HardwareCompareDisabled'
         - hardwareCompareValueHigh: '0'
         - hardwareCompareValueLow: '0'
@@ -246,8 +246,8 @@ instance:
         - channelNumber: 'CH.4'
         - enableAutoChannelIncrement: 'false'
         - loopCount: '0'
-        - hardwareAverageMode: 'kLPADC_HardwareAverageCount1'
-        - sampleTimeMode: 'kLPADC_SampleTimeADCK131'
+        - hardwareAverageMode: 'kLPADC_HardwareAverageCount4'
+        - sampleTimeMode: 'kLPADC_SampleTimeADCK7'
         - hardwareCompareMode: 'kLPADC_HardwareCompareDisabled'
         - hardwareCompareValueHigh: '0'
         - hardwareCompareValueLow: '0'
@@ -283,7 +283,7 @@ const lpadc_config_t ADC0_config = {
   .triggerPriorityPolicy = kLPADC_TriggerPriorityPreemptSubsequently,
   .enableConvPause = false,
   .convPauseDelay = 0UL,
-  .FIFO0Watermark = 5UL,
+  .FIFO0Watermark = 6UL,
   .FIFO1Watermark = 0UL
 };
 lpadc_conv_command_config_t ADC0_commandsConfig[4] = {
@@ -293,8 +293,8 @@ lpadc_conv_command_config_t ADC0_commandsConfig[4] = {
     .chainedNextCommandNumber = 2,
     .enableAutoChannelIncrement = false,
     .loopCount = 0UL,
-    .hardwareAverageMode = kLPADC_HardwareAverageCount1,
-    .sampleTimeMode = kLPADC_SampleTimeADCK131,
+    .hardwareAverageMode = kLPADC_HardwareAverageCount4,
+    .sampleTimeMode = kLPADC_SampleTimeADCK7,
     .hardwareCompareMode = kLPADC_HardwareCompareDisabled,
     .hardwareCompareValueHigh = 0UL,
     .hardwareCompareValueLow = 0UL,
@@ -307,8 +307,8 @@ lpadc_conv_command_config_t ADC0_commandsConfig[4] = {
     .chainedNextCommandNumber = 3,
     .enableAutoChannelIncrement = false,
     .loopCount = 0UL,
-    .hardwareAverageMode = kLPADC_HardwareAverageCount1,
-    .sampleTimeMode = kLPADC_SampleTimeADCK131,
+    .hardwareAverageMode = kLPADC_HardwareAverageCount4,
+    .sampleTimeMode = kLPADC_SampleTimeADCK7,
     .hardwareCompareMode = kLPADC_HardwareCompareDisabled,
     .hardwareCompareValueHigh = 0UL,
     .hardwareCompareValueLow = 0UL,
@@ -321,8 +321,8 @@ lpadc_conv_command_config_t ADC0_commandsConfig[4] = {
     .chainedNextCommandNumber = 4,
     .enableAutoChannelIncrement = false,
     .loopCount = 0UL,
-    .hardwareAverageMode = kLPADC_HardwareAverageCount1,
-    .sampleTimeMode = kLPADC_SampleTimeADCK131,
+    .hardwareAverageMode = kLPADC_HardwareAverageCount4,
+    .sampleTimeMode = kLPADC_SampleTimeADCK7,
     .hardwareCompareMode = kLPADC_HardwareCompareDisabled,
     .hardwareCompareValueHigh = 0UL,
     .hardwareCompareValueLow = 0UL,
@@ -335,8 +335,8 @@ lpadc_conv_command_config_t ADC0_commandsConfig[4] = {
     .chainedNextCommandNumber = 0,
     .enableAutoChannelIncrement = false,
     .loopCount = 0UL,
-    .hardwareAverageMode = kLPADC_HardwareAverageCount1,
-    .sampleTimeMode = kLPADC_SampleTimeADCK131,
+    .hardwareAverageMode = kLPADC_HardwareAverageCount4,
+    .sampleTimeMode = kLPADC_SampleTimeADCK7,
     .hardwareCompareMode = kLPADC_HardwareCompareDisabled,
     .hardwareCompareValueHigh = 0UL,
     .hardwareCompareValueLow = 0UL,
@@ -374,68 +374,6 @@ static void ADC0_init(void) {
   LPADC_SetConvCommandConfig(ADC0_PERIPHERAL, 4, &ADC0_commandsConfig[3]);
   /* Configure trigger 5. */
   LPADC_SetConvTriggerConfig(ADC0_PERIPHERAL, 5, &ADC0_triggersConfig[0]);
-}
-
-/***********************************************************************************************************************
- * CTIMER0 initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'CTIMER0'
-- type: 'ctimer'
-- mode: 'Capture_Match'
-- custom_name_enabled: 'false'
-- type_id: 'ctimer_c8b90232d8b6318ba1dac2cf08fb5f4a'
-- functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'CTIMER0'
-- config_sets:
-  - fsl_ctimer:
-    - ctimerConfig:
-      - mode: 'kCTIMER_TimerMode'
-      - clockSource: 'FunctionClock'
-      - clockSourceFreq: 'BOARD_BootClockRUN'
-      - timerPrescaler: '150Mhz'
-    - EnableTimerInInit: 'true'
-    - matchChannels:
-      - 0:
-        - matchChannelPrefixId: 'Match_0'
-        - matchChannel: 'kCTIMER_Match_3'
-        - matchValueStr: '18kHz'
-        - enableCounterReset: 'true'
-        - enableCounterStop: 'false'
-        - outControl: 'kCTIMER_Output_Toggle'
-        - outPinInitValue: 'low'
-        - enableInterrupt: 'false'
-    - interruptCallbackConfig:
-      - interrupt:
-        - IRQn: 'CTIMER0_IRQn'
-        - enable_priority: 'false'
-        - priority: '0'
-      - callback: 'kCTIMER_NoCallback'
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-const ctimer_config_t CTIMER0_config = {
-  .mode = kCTIMER_TimerMode,
-  .input = kCTIMER_Capture_0,
-  .prescale = 0
-};
-const ctimer_match_config_t CTIMER0_Match_0_config = {
-  .matchValue = 8332,
-  .enableCounterReset = true,
-  .enableCounterStop = false,
-  .outControl = kCTIMER_Output_Toggle,
-  .outPinInitState = false,
-  .enableInterrupt = false
-};
-
-static void CTIMER0_init(void) {
-  /* CTIMER0 peripheral initialization */
-  CTIMER_Init(CTIMER0_PERIPHERAL, &CTIMER0_config);
-  /* Match channel 3 of CTIMER0 peripheral initialization */
-  CTIMER_SetupMatch(CTIMER0_PERIPHERAL, CTIMER0_MATCH_0_CHANNEL, &CTIMER0_Match_0_config);
-  /* Start the timer */
-  CTIMER_StartTimer(CTIMER0_PERIPHERAL);
 }
 
 /***********************************************************************************************************************
@@ -544,6 +482,68 @@ static void NVIC_init(void) {
 } */
 
 /***********************************************************************************************************************
+ * CTIMER0 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'CTIMER0'
+- type: 'ctimer'
+- mode: 'Capture_Match'
+- custom_name_enabled: 'false'
+- type_id: 'ctimer_72ecb1f82fe6700da71dde4e8bc60e39'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'CTIMER0'
+- config_sets:
+  - fsl_ctimer:
+    - ctimerConfig:
+      - mode: 'kCTIMER_TimerMode'
+      - clockSource: 'FunctionClock'
+      - clockSourceFreq: 'BOARD_BootClockRUN'
+      - timerPrescaler: '150MHz'
+    - EnableTimerInInit: 'true'
+    - matchChannels:
+      - 0:
+        - matchChannelPrefixId: 'Match_0'
+        - matchChannel: 'kCTIMER_Match_3'
+        - matchValueStr: '36khz'
+        - enableCounterReset: 'true'
+        - enableCounterStop: 'false'
+        - outControl: 'kCTIMER_Output_Toggle'
+        - outPinInitValue: 'low'
+        - enableInterrupt: 'false'
+    - interruptCallbackConfig:
+      - interrupt:
+        - IRQn: 'CTIMER0_IRQn'
+        - enable_priority: 'false'
+        - priority: '0'
+      - callback: 'kCTIMER_NoCallback'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const ctimer_config_t CTIMER0_config = {
+  .mode = kCTIMER_TimerMode,
+  .input = kCTIMER_Capture_0,
+  .prescale = 0
+};
+const ctimer_match_config_t CTIMER0_Match_0_config = {
+  .matchValue = 4165,
+  .enableCounterReset = true,
+  .enableCounterStop = false,
+  .outControl = kCTIMER_Output_Toggle,
+  .outPinInitState = false,
+  .enableInterrupt = false
+};
+
+static void CTIMER0_init(void) {
+  /* CTIMER0 peripheral initialization */
+  CTIMER_Init(CTIMER0_PERIPHERAL, &CTIMER0_config);
+  /* Match channel 3 of CTIMER0 peripheral initialization */
+  CTIMER_SetupMatch(CTIMER0_PERIPHERAL, CTIMER0_MATCH_0_CHANNEL, &CTIMER0_Match_0_config);
+  /* Start the timer */
+  CTIMER_StartTimer(CTIMER0_PERIPHERAL);
+}
+
+/***********************************************************************************************************************
  * USB0 initialization code
  **********************************************************************************************************************/
 /* clang-format off */
@@ -553,7 +553,7 @@ instance:
 - type: 'usb'
 - mode: 'device'
 - custom_name_enabled: 'false'
-- type_id: 'usb_c84d398fe7344af73d7dbb640d3b1867'
+- type_id: 'usb_49b3e4c7d25fbcd298641994d1b911e9'
 - functional_group: 'BOARD_InitPeripherals'
 - peripheral: 'USB0'
 - config_sets:
@@ -687,8 +687,8 @@ void BOARD_InitPeripherals(void)
   /* Initialize components */
   DMA0_init();
   ADC0_init();
-  CTIMER0_init();
   RTC_init();
+  CTIMER0_init();
   USB0_init();
 }
 
