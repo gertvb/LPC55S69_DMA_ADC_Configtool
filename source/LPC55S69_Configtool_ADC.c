@@ -6,6 +6,16 @@
  * EMail : gertvb@gmail.com                                                                                                         *
  \**********************************************************************************************************************************/
 
+ /*
+  * !!!! BEWARE !!! I have a problem with the ADC and DMA losing Sync, thus ADC[0] does not allways end in buffer[0], but ends in
+  * buffer[n]
+  *
+  * To try and fix this I clear the fifo after every 100 DMA transfers with LPADC_DoResetFIFO0(ADC0_PERIPHERAL)
+  *
+  * Please! any suggestions on how to fix this will be much appreciated!! Please email me if you can see what I am doing wrong
+  *
+  */
+
  /**********************************************************************************************************************************\
  * What am I : Sample project where I've set up the LPC55S69's ADC and DMA with the Peripherals ConfigTool in MCUXpresso            *
  *                                                                                                                                  *
@@ -29,13 +39,18 @@
  *                   Command 2, Dual CH3 A & B                                                                                      *
  *                   Command 3, Single CH2 A                                                                                        *
  *                   Command 4, Single CH4 A                                                                                        *
- *                2. ADC Conversions are triggered at 18kHz by ADC HW Trigger #5, eg CTimer 0, Match channel 3                      *
- *                3. ADC HW Trigger #5 is set up that the ADC results for Channel A and Channel B both go to FIFO 0                 *
- *                4. Watermerk level on FIFO 0 set to 5, thus the DMA will be triggered to transfer the moment when 6 inputs have   *
- *                   been sampled - Imagine the watermark being the ring of dried out tea near the top of an empty teacup           *                                                                                                   *
- *                5. DMA set up with 2 Transfer Control Descriptors (TCD), each descriptor transferring 6 ADC result values, the 2  *
+ *                2. ADC clock now set to 24MHz, was set at 6MHz                                                                    *
+ *                3. ADC 4 conversions averaged (1, 8 not working)                                                                  *
+ *                4. ADC Conversions are triggered at 18kHz by ADC HW Trigger #5, eg CTimer 0, Match channel 3                      *
+ *                5. ADC HW Trigger #5 is set up that the ADC results for Channel A and Channel B both go to FIFO 0                 *
+ *                6. Watermerk level on FIFO 0 set to 6, (5,7,12 not working) thus the DMA will be triggered to transfer the moment *
+ *                   when 7 inputs have been sampled - Imagine the watermark being the ring of dried out tea near the top of an     *
+ *                   empty teacup           *                                                                                       *
+ *                7. DMA set up with 2 Transfer Control Descriptors (TCD), each descriptor transferring 6 ADC result values, the 2  *
  *                   TCDs continuously transfer alternately (ping/pong) to 2 different memory destinations.                         *
- *                6. Printing the consecutively sampled values to 2 different Virtual COM ports, one port displaying the numerical  *
+ *                8. LPADC_DoResetFIFO0(ADC0_PERIPHERAL) called on every 100th DMA callback to clear the fifo storage, somewhere    *
+ *                   the ADC and DMA goes out of sync and adc[0] does not end in buffer[0] but ends in buffer[n]                    *
+ *                9. Printing the consecutively sampled values to 2 different Virtual COM ports, one port displaying the numerical  *
  *                   values of the samples, the other plotting a  coloured * with left/right position dependent on value of the     *
  *                   sample (Colour values best displayed on Windows with Tera Term).                                               *
  *                                                                                                                                  *
@@ -47,11 +62,25 @@
  *           of using the LPC55s69.  Thus my setup of the ADC and DMA is definitely NOT optimal, and I would appreciate feedback on *
  *           my setup!!!                                                                                                            *
  *                                                                                                                                  *
- * Other Info : 1. Mark Dunnett from Embeddedpro has some nice videos on YouTube on the LPC55S69-evk and OKDO E1                    *
- *              2. Jennie Zhang's article on configuring the USB with Config Tool                                                   *
- *                 https://community.nxp.com/t5/LPC-Microcontrollers-Knowledge/Using-ConfigTool-to-create-USB-Project-From-Start/ta-p/1103294
- *              3. El Hughes's stuff on the Mini-monkey and Monkey Jam                                                              *
- *                                                                                                                                  *                                                                                                                        *
+ * Additional references : 1.  Mark Dunnett from Embeddedpro has some nice videos on YouTube on the LPC55S69-evk and OKDO E1        *
+ *                         2.  Mark Dunnets article on Powerquad FFT : https://mcuoneclipse.com/2019/12/03/investigating-arm-cortex-m33-core-dsp-acceleration-3-powerquad-fft-tutorial/
+ *                         3.  Utick timer : https://mcuoneclipse.com/2020/06/16/microtick-utick-timer-tutorial-with-okdo-e1-board/ *
+ *                         4.  https://nerdhut.de/2020/09/28/how-to-use-interrupts-on-the-lpc55s69-powered-okdo-e1/                 *
+ *                         5.  El Hughes's stuff on the Mini-monkey, MonkeyJam and MonkeyListen                                     *
+ *                         6.  Jennie Zhang's article on configuring the USB with NXP Config Tool                                   *
+ *                             https://community.nxp.com/t5/LPC-Microcontrollers-Knowledge/Using-ConfigTool-to-create-USB-Project-From-Start/ta-p/1103294
+ *                         7.  NXP AN12383, Computing FFT with PowerQuad and CMSIS-DSP on LPC5500 : app_powerquad_rfft_q31.c        *
+ *                         8.  powerquad_matrix.c from lpcxpresso55s69_powerquad_matrix sample project                              *
+ *                         9.  fsl_powerquad_cmsis.c in /drivers directory                                                          *
+ *                         10. MCUXpresso : lpcxpresso55s69_littlevgl_demo_widgets_bm project, DEMO_SPI_LCD_WriteData function      *
+ *                         11. MCUXpresso : lpcxpresso55s69_spi_HS_LSPI_dma_b2b_transfer_master project,                            *
+ *                                          EXAMPLE_MasterStartDMATransfer function                                                 *
+ *                         12. MCUXpresso : lpcxpresso55s69_littlevgl_guider                                                        *
+ *                         13. https://docs.lvgl.io/8.0/porting/project.html                                                        *
+ *                         14. https://www.nxp.com/design/training/getting-started-with-gui-guider:TIP-GETTING-STARTED-WITH-GUI-GUIDER
+ *                         15. Eli Hughes's : https://community.nxp.com/t5/MCUs-Community-Articles/LPC55S69-Embedded-Graphics-Using-LVGL-to-build-a-VU-Meter/ba-p/1179826
+ *                         16. Rong Xiangjun's : https://community.nxp.com/t5/LPC-Microcontrollers-Knowledge/ADC-multi-channel-sampling-and-DMA-transfer-in-LPC55xx/ta-p/1304608
+ *                                                                                                                                  *
  \**********************************************************************************************************************************/
 #include <stdio.h>
 #include "board.h"
@@ -75,15 +104,25 @@ volatile uint32_t u32_ADC_Conversion_Result_via_DMA0_TCD1[6];
 static volatile bool b_DMA_CallBack_Transfer_Completed = false;
 static volatile uint16_t u16_DMA_CallBack_last_TCD_used  = 0;
 
+volatile uint16_t u16_DMA_Callback_Counter = 0;
+
 void DMA_Callback(dma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
+	u16_DMA_Callback_Counter ++;
+    if (u16_DMA_Callback_Counter >= 100)
+    {
+    	u16_DMA_Callback_Counter = 0;
+
+        //Somewhere the DMA loses sync, and adc[0] ends up in buffer[n] instead of buffer[0]
+        LPADC_DoResetFIFO0(ADC0_PERIPHERAL);//Faster than multiple calls to : LPADC_GetConvResult(ADC0_PERIPHERAL, &mLpadcResultConfigStruct, 0U)
+    }
+
     if (transferDone)
     {
     	u16_DMA_CallBack_last_TCD_used = tcds;//Which transfer control descriptor was it that did the last transfer?
     							              //I need to read from the one that is NOT currently being used for transferring, else I may corrupt some of my sample data
     	b_DMA_CallBack_Transfer_Completed = true;
     }
-    transferDone = false;
 }
 
 int main(void)
