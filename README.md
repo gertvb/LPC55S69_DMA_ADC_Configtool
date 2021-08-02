@@ -1,6 +1,13 @@
 # LPC55S69_DMA_ADC_Configtool
  Sample MCUXpresso project where ADC and DMA is set up with the Configtool
 
+2021/08/01 In the last month picked up that the ADC and DMA gets out of sync and that adc[0] does NOT allways go to buffer[0] but often ends
+up in buffer[n]
+
+I have tried about all combinations of changes in configtools to find my problem, but to no avail
+
+Beat so far is to clear the fifo buffer every 100 transfers
+
 MCUXpresso V11.2 project pulled into V11.3. I just got it to compile without errors, havent tested the 11.3 on the physical chip!!
 
 https://community.nxp.com/t5/LPC-Microcontrollers/Using-Configtools-to-set-up-ADC-and-DMA-from-scratch-Sample/m-p/1183779#M42890
