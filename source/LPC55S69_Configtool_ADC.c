@@ -7,10 +7,9 @@
  \**********************************************************************************************************************************/
 
  /*
+  *
   * !!!! BEWARE !!! I have a problem with the ADC and DMA losing Sync, thus ADC[0] does not allways end in buffer[0], but ends in
   * buffer[n]
-  *
-  * To try and fix this I clear the fifo after every 100 DMA transfers with LPADC_DoResetFIFO0(ADC0_PERIPHERAL)
   *
   * Please! any suggestions on how to fix this will be much appreciated!! Please email me if you can see what I am doing wrong
   *
@@ -82,6 +81,17 @@
  *                         16. Rong Xiangjun's : https://community.nxp.com/t5/LPC-Microcontrollers-Knowledge/ADC-multi-channel-sampling-and-DMA-transfer-in-LPC55xx/ta-p/1304608
  *                                                                                                                                  *
  \**********************************************************************************************************************************/
+
+ /********************************************************************************************************************************************************************************************************\
+ * My Subversion Info, automatically updated on commit, don't edit!                                                                                                                                       *
+ *                                                                                                                                                                                                        *
+ $Author:: Gert_v_B                                                                                                                                                                                       $
+ $Date:: 2021-08-03 14:11:52 +0200 (Tue, 03 Aug 2021)                                                                                                                                                     $
+ $Id:: LPC55S69_Configtool_ADC.c 1538 2021-08-03 12:11:52Z Gert_v_B                                                                                                                                       $
+ $Header:: https://techexplorer/svn/SVN_Repository/c/lpc55s69_Configtool_ADC/source/LPC55S69_Configtool_ADC.c 1538 2021-08-03 12:11:52Z Gert_v_B                                                          $
+ $Revision:: 1538                                                                                                                                                                                         $
+ \********************************************************************************************************************************************************************************************************/
+
 #include <stdio.h>
 #include "board.h"
 #include "peripherals.h"
@@ -108,14 +118,14 @@ volatile uint16_t u16_DMA_Callback_Counter = 0;
 
 void DMA_Callback(dma_handle_t *handle, void *param, bool transferDone, uint32_t tcds)
 {
-	u16_DMA_Callback_Counter ++;
-    if (u16_DMA_Callback_Counter >= 100)
-    {
-    	u16_DMA_Callback_Counter = 0;
-
-        //Somewhere the DMA loses sync, and adc[0] ends up in buffer[n] instead of buffer[0]
-        LPADC_DoResetFIFO0(ADC0_PERIPHERAL);//Faster than multiple calls to : LPADC_GetConvResult(ADC0_PERIPHERAL, &mLpadcResultConfigStruct, 0U)
-    }
+//	u16_DMA_Callback_Counter ++;
+//    if (u16_DMA_Callback_Counter >= 100)
+//    {
+//    	u16_DMA_Callback_Counter = 0;
+//
+//        //Somewhere the DMA loses sync, and adc[0] ends up in buffer[n] instead of buffer[0]
+//        LPADC_DoResetFIFO0(ADC0_PERIPHERAL);//Faster than multiple calls to : LPADC_GetConvResult(ADC0_PERIPHERAL, &mLpadcResultConfigStruct, 0U)
+//    }
 
     if (transferDone)
     {
@@ -183,9 +193,9 @@ int main(void)
     	        	USB_DeviceCdcAcmSend(ptr_UsbDeviceComposite->interface2CicVcomHandle, 4, s_VCom2_Send_Buffer, u16_Formatted_chars_in_VCom2_Send_Buffer);
     	        }
     		}
-        	else//I should not have come here . . . .
+        	else if  (u16_DMA_CallBack_last_TCD_used > 1)//I should not have come here . . . .
         	{
-        		PRINTF("Invalid TCD from DMA!!!!\n");
+        		PRINTF("%d Invalid TCD from DMA!!!!\n", u16_DMA_CallBack_last_TCD_used);
         	}
 
     	}//if (b_DMA_CallBack_Transfer_Completed)
@@ -197,9 +207,22 @@ int main(void)
     	//__asm volatile ("nop");
 
 		i++ ;
+		//just give TeraTerm some time to catch up
+		if (i > 2000)
+		{
+			i = 0;
+    		PRINTF("Sleepin . . . . zzzz . . . \n");
+			SDK_DelayAtLeastUs(20000000U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);//so the user can inspect what was in the output.....
+
+			//Clear screen
+			u16_Formatted_chars_in_VCom2_Send_Buffer = format_terminal_clrscr_into_string(s_VCom2_Send_Buffer, hardcoded_string_length);
+	        if (u16_Formatted_chars_in_VCom2_Send_Buffer > 0)
+	        {
+	        	USB_DeviceCdcAcmSend(ptr_UsbDeviceComposite->interface2CicVcomHandle, 4, s_VCom2_Send_Buffer, u16_Formatted_chars_in_VCom2_Send_Buffer);
+	        	USB_DeviceCdcAcmSend(ptr_UsbDeviceComposite->interface0CicVcomHandle, 2, s_VCom2_Send_Buffer, u16_Formatted_chars_in_VCom2_Send_Buffer);
+	        }
+		}
     }//while(1)
 
     return 0 ;
 }
-
-//        if (GPIO_PinRead(GPIO, 1, 9))

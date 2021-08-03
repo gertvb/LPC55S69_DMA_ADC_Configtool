@@ -3,7 +3,7 @@
  *                                                                                                                                  *
  * Author : Gert van Biljon                                                                                                         *
  *                                                                                                                                  *
- * EMail : gertvb@gmail.com or gert@techexplorer.co.za                                                                              *
+ * EMail : gertvb@gmail.com                                                                                                         *
  \**********************************************************************************************************************************/
 
  /**********************************************************************************************************************************\
@@ -22,8 +22,8 @@
 
  /**********************************************************************************************************************************\
  $Author:: Gert_v_B                                                                                                                 $
- $Date:: 2020-11-16 10:42:41 +0200 (Mon, 16 Nov 2020)                                                                               $
- $Revision:: 1255                                                                                                                   $
+ $Date:: 2021-05-05 16:38:06 +0200 (Wed, 05 May 2021)                                                                               $
+ $Revision:: 1440                                                                                                                   $
  $URL:: https://techexplorer/svn/SVN_Repository/c/terminal_output_routines/terminal_output_routines.c                               $
  \**********************************************************************************************************************************/
 #include <stdint.h>
@@ -63,7 +63,7 @@ uint16_t format_values_into_rainbow_seismograph_line(uint8_t * formatted_string,
                                 "\033[%uC*\033[270D"
                                 print_BLUE
                                 "\033[%uC*\033[270D"
-                                print_INDIGO
+                                print_VIOLET
                                 "\033[%uC*\033[270D"
                                 "\n\r",
                                 value1 >> 8,
@@ -176,7 +176,7 @@ uint16_t format_values_into_rainbow_string( uint8_t * formatted_string,
                                 (value5 >= threshold ? print_BLUE : print_BLUE_Background),
                                 value5,
 
-                                (value6 >= threshold ? print_INDIGO : print_INDIGO_Background),
+                                (value6 >= threshold ? print_VIOLET : print_VIOLET_Background),
                                 value6
 
                             );
@@ -190,12 +190,15 @@ uint16_t format_values_into_rainbow_string( uint8_t * formatted_string,
  *                                                                                                                                  *
  * What do I do : Extract SVN info and format it into a decent display                                                              *
  \**********************************************************************************************************************************/
-uint16_t format_svn_and_compiler_stuff_into_string(uint8_t * formatted_string, uint16_t formatted_string_length)
+uint16_t format_svn_and_compiler_stuff_into_string(uint8_t* formatted_string, uint16_t formatted_string_length, char* SVN_Author, char* SVN_Revision, char* SVN_Date)
 {
-    char SVN_Author[] = "$Author: Gert_v_B $";
-    char SVN_Revision[] = "$Revision: 1255 $";
-    char SVN_Date[] = "$Date: 2020-11-16 10:42:41 +0200 (Mon, 16 Nov 2020) $";
-    char SVN_String_Delimiter[] = " ";
+	//Go and declare these in the main program where this fonction is called from
+	//#define SVN_string_lengths 75
+	//volatile char SVN_Author[SVN_string_lengths] = "$Author: Gert_v_B $";
+	//volatile char SVN_Revision[SVN_string_lengths] = "$Revision: 1440 $";
+	//volatile char SVN_Date[SVN_string_lengths] = "$Date: 2021-05-05 16:38:06 +0200 (Wed, 05 May 2021) $";
+
+	char SVN_String_Delimiter[] = " ";
 
     char * Extracted_SVN_Author_String;
     char * Extracted_SVN_Revision_String;
@@ -228,15 +231,11 @@ uint16_t format_svn_and_compiler_stuff_into_string(uint8_t * formatted_string, u
                                 "\n\r"
                                 print_WHITE
                                 "TechExplorer Development Framework\n\r"
-                                //"Copyright (c) 2019-2020 TechExplorer\n\r" //© is difficult to print on the different terminals thus I use (c)
+                                //"Copyright (c) 2019-2021 TechExplorer\n\r" //© is difficult to print on the different terminals thus I use (c)
                                 "\n\r"
 
                                 print_WHITE
                                 "Email : "
-                                print_YELLOW
-                                "gert@techexplorer.co.za "
-                                print_WHITE
-                                "or "
                                 print_GREEN
                                 "gertvb@gmail.com \n\r\n\r"
 
@@ -272,14 +271,14 @@ uint16_t format_svn_and_compiler_stuff_into_string(uint8_t * formatted_string, u
 
                                 print_WHITE
                                 "Compile Time : "
-                                print_INDIGO
+                                print_VIOLET
                                 "%s"
                                 print_WHITE
                                 "\r\n\r\n"
 
                                 print_WHITE
                                 "GCC version : "
-                                print_VIOLET
+                                print_RED
                                 "%d.%d.%d"
                                 print_WHITE
                                 "\r\n\r\n"
@@ -324,4 +323,3 @@ uint16_t format_terminal_clrscr_into_string(uint8_t * formatted_string, uint16_t
                             );
     return format_length;
 }//uint16_t format_terminal_clrscr_into_string(uint8_t * formatted_string, uint16_t formatted_string_length)
-

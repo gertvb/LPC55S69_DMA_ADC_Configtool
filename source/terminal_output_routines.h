@@ -3,7 +3,7 @@
  *                                                                                                                                  *
  * Author : Gert van Biljon                                                                                                         *
  *                                                                                                                                  *
- * EMail : gertvb@gmail.com or gert@techexplorer.co.za                                                                              *
+ * EMail : gertvb@gmail.com                                                                                                         *
  \**********************************************************************************************************************************/
 
  /**********************************************************************************************************************************\
@@ -22,8 +22,8 @@
 
  /**********************************************************************************************************************************\
  $Author:: Gert_v_B                                                                                                                 $
- $Date:: 2020-11-16 07:26:57 +0200 (Mon, 16 Nov 2020)                                                                               $
- $Revision:: 1254                                                                                                                   $
+ $Date:: 2021-05-05 16:38:06 +0200 (Wed, 05 May 2021)                                                                               $
+ $Revision:: 1440                                                                                                                   $
  $URL:: https://techexplorer/svn/SVN_Repository/c/terminal_output_routines/terminal_output_routines.h                               $
  \**********************************************************************************************************************************/
 
@@ -93,25 +93,23 @@
 #define print_WHITE             "\033[38;2;255;255;255m"  //"\033[38;5;231m"
 #define print_BLACK             "\033[38;2;0;0;0m"
 #define print_RED               "\033[38;2;255;0;0m"      //"\033[38;5;196m"
-#define print_ORANGE            "\033[38;2;255;127;0m"    //"\033[38;5;208m"
+#define print_ORANGE            "\033[38;2;255;191;0m"    //"\033[38;5;208m"
 #define print_YELLOW            "\033[38;2;255;255;0m"    //"\033[38;5;226m"
 #define print_GREEN             "\033[38;2;0;255;0m"      //"\033[38;5;046m"
-#define print_BLUE              "\033[38;2;0;0;255m"      //"\033[38;5;021m"
-#define print_INDIGO            "\033[38;2;75;0;130m"     //"\033[38;5;055m"
-#define print_VIOLET            "\033[38;2;148;0;211m"    //"\033[38;5;128m"
+#define print_BLUE              "\033[38;2;0;255;255m"    //"\033[38;5;021m"
+#define print_VIOLET            "\033[38;2;255;0;255m"    //"\033[38;5;128m"
 
 #define print_WHITE_Background  "\033[48;2;255;255;255m"  //"\033[38;5;231m"
 #define print_BLACK_Background  "\033[48;2;0;0;0m"
 #define print_RED_Background    "\033[48;2;255;0;0m"      //"\033[38;5;196m"
-#define print_ORANGE_Background "\033[48;2;255;127;0m"    //"\033[38;5;208m"
+#define print_ORANGE_Background "\033[48;2;255;191;0m"    //"\033[38;5;208m"
 #define print_YELLOW_Background "\033[48;2;255;255;0m"    //"\033[38;5;226m"
 #define print_GREEN_Background  "\033[48;2;0;255;0m"      //"\033[38;5;046m"
-#define print_BLUE_Background   "\033[48;2;0;0;255m"      //"\033[38;5;021m"
-#define print_INDIGO_Background "\033[48;2;75;0;130m"     //"\033[38;5;055m"
-#define print_VIOLET_Background "\033[48;2;148;0;211m"    //"\033[38;5;128m"
+#define print_BLUE_Background   "\033[48;2;0;255;255m"    //"\033[38;5;021m"
+#define print_VIOLET_Background "\033[48;2;255;0;255m"    //"\033[38;5;128m"
 
 #define clrscr                  "\033c"   //"\033[2J"
-#define cursor_move_home        "\033[H" // can also do : "\033[12,23H" to move to row 12, column 23
+#define cursor_move_home        "\033[H"  // can also do : "\033[12,23H" to move to row 12, column 23
 //"\033[150C" Move cursor 150 positions right
 //"\033[270D" Move cursor 270 positions left
 
@@ -125,4 +123,4 @@ uint16_t format_values_into_rainbow_seismograph_line(uint8_t * formatted_string,
 
 uint16_t format_values_into_rainbow_string(uint8_t * formatted_string, uint16_t formatted_string_length, int32_t number, int32_t threshold, int32_t value1, int32_t value2, int32_t value3, int32_t value4, int32_t value5, int32_t value6 );
 
-uint16_t format_svn_and_compiler_stuff_into_string(uint8_t * formatted_string, uint16_t formatted_string_length);
+uint16_t format_svn_and_compiler_stuff_into_string(uint8_t* formatted_string, uint16_t formatted_string_length, char* SVN_Author, char* SVN_Revision, char* SVN_Date);
